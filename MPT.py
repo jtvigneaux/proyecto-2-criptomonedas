@@ -15,7 +15,7 @@ class MPT:
             return
 
         hash_key = keccak_hash(key)
-        
+        #print(hash_key) 
         path = Path(hash_key)
 
         node = self.get(self.root, path)
@@ -27,6 +27,8 @@ class MPT:
 
         node_path = Path(hash_key)
         result = self.update(self.root, node_path, value)
+
+        #print(self.get_node(result).value)
 
         self.root = result
 
@@ -43,7 +45,7 @@ class MPT:
         
         if isinstance(node, Leaf):
             if node.path == path:
-                return path
+                return node
         
         elif isinstance(node, Extension):
             # Hay que llamar recursivamente
@@ -56,8 +58,8 @@ class MPT:
             if len(branch) > 0:
                 return self.get(branch, path.add_offset(1))
 
-
     def update(self, node_ref, path, value):
+        #print(node_ref, path, value)
         # Si no hay un nodo de referencia
         if not node_ref:
             # Guardar un nuevo nodo hoja y retornarlo
@@ -131,8 +133,6 @@ class MPT:
             node.branches[_id] = updated_reference
 
             return self.save_node(node)
-
-
 
     def create_branch(self, path1, value1, path2, value2):
         # Lista con los valores de todos los branches

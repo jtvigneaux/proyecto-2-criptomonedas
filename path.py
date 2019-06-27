@@ -10,7 +10,7 @@ class Path:
         return len(self.path) * 2 - self.offset
 
     def __repr__(self):
-        return "<Path: Data: 0x{}, Offset: {}>".format(self.path.hex(), self.offset)
+        return "<Path: Ruta: 0x{}, Offset: {}>".format(self.path.hex(), self.offset)
 
     def __eq__(self, other):
         if len(self) != len(other):
@@ -54,13 +54,13 @@ class Path:
         return Path(data, offset)
 
     @staticmethod
-    def decode_type(data):
-        es_impar = data[0] & 0x10 == 0x10
-        es_hoja = data[0] & 0x20 == 0x20
+    def decode_type(path):
+        es_impar = path[0] & 0x10 == 0x10
+        es_hoja = path[0] & 0x20 == 0x20
 
         offset = 1 if es_impar else 2
 
-        return Path(data, offset), es_hoja
+        return Path(path, offset), es_hoja
 
     def common_path(self, node_path):
         length = min(len(self), len(node_path))

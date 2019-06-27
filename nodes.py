@@ -16,17 +16,19 @@ class Node(ABC):
 
     @staticmethod
     def decode(encoded_node):
+        #print("node", encoded_node)
         node_list = rlp.decode(encoded_node)
+        #print("list", node_list)
 
         if len(node_list) == 17:
             branches = list(map(encode_node_data, node_list[:16]))
             value = node_list[16]
             return Branch(branches, value)
 
-        path, es_hoja = Path.decode_type(node_list)
+        path, es_hoja = Path.decode_type(node_list[0])
         if es_hoja:
-            return Leaf(path, data[1])
-        reference = encode_node_data(data[1])
+            return Leaf(path, node_list[1])
+        reference = encode_node_data(node_list[1])
         return Extension(path, reference)
 
     def into_reference(self):
