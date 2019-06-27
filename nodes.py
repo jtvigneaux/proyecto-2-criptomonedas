@@ -6,8 +6,9 @@ from abc import ABC, abstractmethod
 
 class Node(ABC):
 
-    def __init__(self, path=''):
+    def __init__(self, type, path=''):
         super().__init__()
+        self.type = type
         self.path = path
 
     @abstractmethod
@@ -39,7 +40,7 @@ class Node(ABC):
 class Leaf(Node):
 
     def __init__(self, path, value):
-        super().__init__(path)
+        super().__init__("Leaf", path)
         self.value = value
 
     def encode(self):
@@ -49,7 +50,7 @@ class Leaf(Node):
 class Branch(Node):
 
     def __init__(self, branches, value):
-        super().__init__()
+        super().__init__("Branch")
         self.branches = branches
         self.value = value
 
@@ -61,7 +62,7 @@ class Branch(Node):
 class Extension(Node):
 
     def __init__(self, path, next_node):
-        super().__init__(path)
+        super().__init__("Extension", path)
         self.next_node = next_node
 
     def encode(self):
