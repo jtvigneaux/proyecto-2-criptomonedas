@@ -24,11 +24,10 @@ class MPT:
 
     def update_trie(self, key, value):
         hash_key = keccak_hash(key)
+        print("Hash editado:", hash_key.hex())
 
         node_path = Path(hash_key)
         result = self.update(self.root, node_path, value)
-
-        #print(self.get_node(result).value)
 
         self.root = result
 
@@ -59,7 +58,6 @@ class MPT:
                 return self.get(branch, path.add_offset(1))
 
     def update(self, node_ref, path, value):
-        #print(node_ref, path, value)
         # Si no hay un nodo de referencia
         if not node_ref:
             # Guardar un nuevo nodo hoja y retornarlo
