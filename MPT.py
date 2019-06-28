@@ -172,29 +172,29 @@ class MPT:
         self.nodes[reference] = node.encode()
         return reference
 
-    def print_mpt(self, node_ref, parent_ref="", level=0, branch_id=False):
+    def print_mpt(self, node_ref, parent_ref="", level=0, branch_id=-1):
         if not node_ref:
             return 
         node = self.get_node(node_ref)
         if node.type == "Leaf":
             print("Tipo: Leaf")
             print("Nivel:", level)
+            print("Value", node.value)
             if parent_ref:
                 print("Parent hash: {}".format(parent_ref.hex()))
-                if branch_id:
-                    print("Branch id:", node.path[0])
+                if branch_id > -1:
+                    print("Branch id:", branch_id)
             else:
                 print("Root node")
-            print("Hash:", node_ref.hex())
-            print("Value", node.value)
+            print("Hash:", node_ref.path.hex())
             print()
         elif node.type == "Extension":
             print("Tipo: Extension")
             print("Nivel:", level)
             if parent_ref:
                 print("Parent hash: {}".format(parent_ref.hex()))
-                if branch_id:
-                    print("Branch id:", node.path[0])
+                if branch_id > -1:
+                    print("Branch id:", branch_id)
             else:
                 print("Root node")
             print("Hash:", node_ref.hex())
@@ -203,17 +203,17 @@ class MPT:
         elif node.type == "Branch":
             print("Tipo: Branch")
             print("Nivel:", level)
+            if node.value:
+                print("Value:", node.value)
             if parent_ref:
                 print("Parent hash: {}".format(parent_ref.hex()))
-                if branch_id:
-                    print("Branch id:", node.path[0])
+                if branch_id > -1:
+                    print("Branch id:", branch_id)
             else:
                 print("Root node")
             print("Hash:", node_ref.hex())
-            if node.value:
-                print("Value:", node.value)
             print()
-            for branch in node.branches:
+            for i, branch in enumerate(node.branches):
                 if branch:
-                    self.print_mpt(branch, node_ref, level + 1, True)
+                    self.print_mpt(branch, node_ref, level + 1, i)
         
